@@ -43,6 +43,7 @@ def get_iss_location():
         ts=datetime.utcfromtimestamp(req_timestamp).strftime('%Y-%m-%d %H:%M:%S')
         print("Date/time(UTC): "+ts)
         print("The current ISS position is [latidude/longitude]: "+iss_latitude+";"+iss_longitude)
+        print("You can check the place at the following link: http://www.google.com/maps/place/"+str(iss_latitude)+","+str(iss_longitude))
     
     else:
         print("Error requesting data from API. Status code: "+str(response.status_code))
