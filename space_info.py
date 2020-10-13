@@ -1,4 +1,5 @@
 import requests, json
+from datetime import datetime
 
 def print_intro():
     print("#"*40)
@@ -14,7 +15,7 @@ def main_function():
     if selection == "1":
         get_amount_astronauts()
     elif selection == "2":
-        print("Second choice")
+        get_iss_location()
     elif selection == "3":
         print("Third choice")
     else:
@@ -22,16 +23,30 @@ def main_function():
 
 def get_amount_astronauts():
     response = requests.get("http://api.open-notify.org/astros.json")
+    print("#"*40)
     if response.status_code == 200:
+        
         print("Request succesfull!")
         print("Currently, there are "+str(response.json()['number'])+" people in ISS")
+        for i in response.json()['people']:
+            print(i['name'])
     else:
         print("Error requesting data from API. Status code: "+str(response.status_code))
 
-def jprint(obj):
-    # create a formatted string of the Python JSON object
-    text = json.dumps(obj, sort_keys=True, indent=4)
-    print(text)
+def get_iss_location():
+    print("#"*40)
+    response = requests.get("http://api.open-notify.org/iss-now.json")
+    if response.status_code == 200:
+        iss_latitude=response.json()['iss_position']['latitude']
+        iss_longitude=response.json()['iss_position']['longitude']
+        req_timestamp=response.json()['timestamp']
+        ts=datetime.utcfromtimestamp(req_timestamp).strftime('%Y-%m-%d %H:%M:%S')
+        print("Date/time(UTC): "+ts)
+        print("The current ISS position is [latidude/longitude]: "+iss_latitude+";"+iss_longitude)
+    
+    else:
+        print("Error requesting data from API. Status code: "+str(response.status_code))
+
 
 
 print_intro()
