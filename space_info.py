@@ -17,7 +17,7 @@ def main_function():
     elif selection == "2":
         get_iss_location()
     elif selection == "3":
-        print("Third choice")
+        get_next_pass()
     else:
         print("You entered a non-valid value. Please run the app again.")
 
@@ -47,6 +47,20 @@ def get_iss_location():
     else:
         print("Error requesting data from API. Status code: "+str(response.status_code))
 
+def get_next_pass():
+    print("#"*40)
+    print("Please enter the latitude of the place:")
+    lat=input()
+    print("Please enter the longitude of the place:")
+    lon=input()
+    response = requests.get("http://api.open-notify.org/iss-pass.json?lat="+lat+"&lon="+lon+"&n=1")
+    if response.status_code == 200:
+        t_next_pass=response.json()['response'][0]['risetime']
+        t_next_pass_utc=datetime.utcfromtimestamp(t_next_pass).strftime('%Y-%m-%d %H:%M:%S')
+        print("The next pass will be at: "+t_next_pass_utc)
+    else:
+        print("Error requesting data from API. Status code: "+str(response.status_code))
+        
 
 
 print_intro()
